@@ -23,10 +23,10 @@ arrel = doc.createElement("FET")
 arrel.setAttribute("version","5.9.1")
 doc.appendChild(arrel)
 llistaProfes = doc.createElement("Teachers_List")
-subjects_list=doc.createElement("Subjects_List")
+Students_List=doc.createElement("Students_List")
 Activity_Tags_List=doc.createElement("Activity_Tags_List")
 arrel.appendChild(llistaProfes)
-arrel.appendChild(subjects_list)
+arrel.appendChild(Students_List)
 arrel.appendChild(Activity_Tags_List)
 gestib = xml.dom.minidom.parse("ExportacioDadesHoraris.xml")
 fet = xml.dom.minidom.parse("fet2009.fet")
@@ -49,22 +49,56 @@ for node in gestib.getElementsByTagName("PLACA"):
 
 
 #cursos
-#<Subjects_List>
-#<Subject>
-	#<Name>1r ESO A</Name>
-#</Subject>
-#</Subjects_List>
+#<Students_List>
+	#<Year>
+		#<Name>1rESO</Name>
+		#<Number_of_Students>0</Number_of_Students>
+		#<Group>
+			#<Name>1rESO - A</Name>
+			#<Number_of_Students>0</Number_of_Students>
+		#</Group>
+		#<Group>
+			#<Name>1rESO - B</Name>
+			#<Number_of_Students>0</Number_of_Students>
+		#</Group>
+	#</Year>
+	#<Year>
+		#<Name>2n ESO</Name>
+		#<Number_of_Students>0</Number_of_Students>
+		#<Group>
+			#<Name>2n ESO - A</Name>
+			#<Number_of_Students>0</Number_of_Students>
+		#</Group>
+		#<Group>
+			#<Name>2n ESO - B</Name>
+			#<Number_of_Students>0</Number_of_Students>
+		#</Group>
+	#</Year>
+#</Students_List>
 for node in gestib.getElementsByTagName("CURS"):
 	descripcio=node.getAttribute("descripcio")
 	grups=node.getElementsByTagName("GRUP")
+	Year=doc.createElement("Year")
+	Students_List.appendChild(Year)
+	courseName=doc.createElement("Name")
+	courseName.appendChild(doc.createTextNode(descripcio))
+	Year.appendChild(courseName)
+	Number_of_Students=doc.createElement("Number_of_Students")
+	Number_of_Students.appendChild(doc.createTextNode("0"))
+	Year.appendChild(Number_of_Students)
 	for grup in grups:
+		Group=doc.createElement("Group")
 		desFinal=descripcio+" "+ grup.getAttribute("nom")
 		nom=doc.createTextNode(desFinal)
-		s=doc.createElement("Subject")
 		name=doc.createElement("Name")
 		name.appendChild(nom)
-		s.appendChild(name)
-		subjects_list.appendChild(s)
+		Group.appendChild(name)
+		Year.appendChild(Group)
+		
+		Number_of_StudentsGrup=doc.createElement("Number_of_Students")
+		Number_of_StudentsGrup.appendChild(doc.createTextNode("0"))
+		Group.appendChild(Number_of_Students)
+
 		
 #materies
 #<Activity_Tags_List>
@@ -83,7 +117,17 @@ listmat=[]
 for node in gestib.getElementsByTagName("MATERIA"):
 	descripcio=node.getAttribute("descripcio")
 	curta=node.getAttribute("curta")
-	codi=node.getAttribute("codi")	
+	codi=node.getAttribute("codi")
+	codeCourse=node.getAttribute("curs")
+	cursos=gestib.getElementsByTagName("CURS")
+	courseOfMateria=""
+	#we need a better method to travessing an xml to get the description for a known attribute
+	for curs in cursos: #searching course description of subject to put in listMat, avoid create duplicates
+		keys=curs.attributes["codi"]
+		desc=curs.attributes["descripcio"]
+		if keys.value==codeCourse:
+			courseOfMateria=desc.value #now we have course where the subject is done
+	curta=curta+" ("+codi+")-"+courseOfMateria
 	if curta not in listmat:
 		listmat.append(curta)
 		a=doc.createElement("Activity_Tag")
