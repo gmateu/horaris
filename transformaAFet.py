@@ -88,7 +88,7 @@ for node in gestib.getElementsByTagName("CURS"):
 	Year.appendChild(Number_of_Students)
 	for grup in grups:
 		Group=doc.createElement("Group")
-		desFinal=descripcio+" "+ grup.getAttribute("nom")
+		desFinal=descripcio+" "+ grup.getAttribute("nom")+ "("+grup.getAttribute("codi")+")"
 		nom=doc.createTextNode(desFinal)
 		name=doc.createElement("Name")
 		name.appendChild(nom)
