@@ -10,6 +10,7 @@ DIR_DESTI="/home/liceu/Imatges/curs2009/" #directori on es guarden els rostres, 
 PATRO_XML="haarcascade_frontalface_alt.xml" #patrons a buscar
 MARGE_LATERAL=100 #les cares s'han d'ampliar tan cap als laterals com en la zona vertical
 MARGE_VERTICAL=150
+hResized=150 #alçada de les imatges redimensionades
 
 def detectObjects(image,k):
      grayscale = cvCreateImage(cvSize(image.width, image.height), 8, 1)
@@ -24,9 +25,15 @@ def detectObjects(image,k):
      if faces:
          for f in faces:
              img = adaptors.Ipl2PIL(image)
+             
+
              box = (f.x-MARGE_LATERAL, f.y-MARGE_VERTICAL, f.x+f.width+MARGE_LATERAL, f.y+f.height+MARGE_VERTICAL)
              region = img.crop(box)
-             print "k",k
+             factor=float(hResized)/region.size[1]
+             wResized=region.size[0]*factor
+             sizeRedim=(int(wResized),int(hResized))
+             region=region.resize(sizeRedim) 
+             print "region.size",region.size,"sizeRedim",sizeRedim
              i=i+1
              region.save(DIR_DESTI+str(k)+'_'+str(i)+'.jpg')
  
