@@ -32,7 +32,7 @@ def detectObjects(image,k):
              factor=float(hResized)/region.size[1]
              wResized=region.size[0]*factor
              sizeRedim=(int(wResized),int(hResized))
-             region=region.resize(sizeRedim) 
+             region=region.resize(sizeRedim)   
              print "region.size",region.size,"sizeRedim",sizeRedim
              i=i+1
              region.save(DIR_DESTI+str(k)+'_'+str(i)+'.jpg')
