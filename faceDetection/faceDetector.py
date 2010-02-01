@@ -5,13 +5,13 @@ from opencv.cv import *
 from opencv import adaptors
 from opencv.highgui import *
 
-DIR_FOTOS="/home/liceu/Imatges/Fotografies/2010/01/28"
-DIR_DESTI="/home/liceu/Imatges/curs2009/"
-PATRO_XML="haarcascade_frontalface_alt.xml"
-MARGE_LATERAL=100
+DIR_FOTOS="/home/liceu/Imatges/Fotografies/2010/01/28/" #directori on hi ha les fotos, el darrer "/" és important
+DIR_DESTI="/home/liceu/Imatges/curs2009/" #directori on es guarden els rostres, el darrer "/" és important
+PATRO_XML="haarcascade_frontalface_alt.xml" #patrons a buscar
+MARGE_LATERAL=100 #les cares s'han d'ampliar tan cap als laterals com en la zona vertical
 MARGE_VERTICAL=150
 
-def detectObjects(image,file,k):
+def detectObjects(image,k):
      grayscale = cvCreateImage(cvSize(image.width, image.height), 8, 1)
      cvCvtColor(image, grayscale, CV_BGR2GRAY)
      
@@ -23,7 +23,7 @@ def detectObjects(image,file,k):
      i=0
      if faces:
          for f in faces:
-             img = adaptors.Ipl2PIL(image) ##.resize((320,240))
+             img = adaptors.Ipl2PIL(image)
              box = (f.x-MARGE_LATERAL, f.y-MARGE_VERTICAL, f.x+f.width+MARGE_LATERAL, f.y+f.height+MARGE_VERTICAL)
              region = img.crop(box)
              print "k",k
@@ -35,10 +35,11 @@ def main():
     for root,dirs,files in os.walk(DIR_FOTOS):
         files.sort()
         for file in [f for f in files if f.lower().endswith("jpg")]:
+            file=DIR_FOTOS+file
             image = cvLoadImage(file, 1)
             k=k+1
             print k,file
-            detectObjects(image,file,k)
+            detectObjects(image,k)
  
 if __name__ == "__main__":
   main()
