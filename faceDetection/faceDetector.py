@@ -5,15 +5,15 @@ from opencv.cv import *
 from opencv import adaptors
 from opencv.highgui import *
 
-DIR_FOTOS="/home/liceu/Imatges/Fotografies/2010/01/28/" #directori on hi ha les fotos, el darrer "/" és important
-DIR_DESTI="/home/liceu/Imatges/curs2009/" #directori on es guarden els rostres, el darrer "/" és important
+DIR_FOTOS="/home/guillem/Imatges/" #directori on hi ha les fotos, el darrer "/" és important
+DIR_DESTI="/home/guillem/src/" #directori on es guarden els rostres, el darrer "/" és important
 PATRO_XML="haarcascade_frontalface_alt.xml" #patrons a buscar
 MARGE_LATERAL=70 #les cares s'han d'ampliar tan cap als laterals com en la zona vertical
 MARGE_VERTICAL=190
 xRATIO=480
 yRATIO=640
 hResized=150 #alçada de les imatges redimensionades
-RESIZE=True #en aquest cas redimensinarem les cares
+RESIZE=False #en aquest cas redimensinarem les cares
 RENAME=True #en aquest cas reanomenam les captures segons l'ordre en que es van prendre
 
 def detectObjects(image,k,file):
@@ -50,9 +50,10 @@ def detectObjects(image,k,file):
 def main():
     k=0
     for root,dirs,files in os.walk(DIR_FOTOS):
+	print "roots",root,"dirs",dirs,"files",files
         files.sort()
         for file in [f for f in files if f.lower().endswith("jpg")]:
-            picture=DIR_FOTOS+file
+            picture=root+"/"+file
             image = cvLoadImage(picture, 1)
             k=k+1
             print k,picture,"file",file
