@@ -5,15 +5,15 @@ from opencv.cv import *
 from opencv import adaptors
 from opencv.highgui import *
 
-DIR_FOTOS="/home/guillem/Imatges/" #directori on hi ha les fotos, el darrer "/" és important
-DIR_DESTI="/home/guillem/src/" #directori on es guarden els rostres, el darrer "/" és important
+DIR_FOTOS="/home/guillem/Dropbox/fotosalumnes/2010/" #directori on hi ha les fotos, el darrer "/" és important
+DIR_DESTI="/home/guillem/Dropbox/compartides/lluisFusterGuillem/fotosAlumnes2010/" #directori on es guarden els rostres, el darrer "/" és important
 PATRO_XML="haarcascade_frontalface_alt.xml" #patrons a buscar
 MARGE_LATERAL=70 #les cares s'han d'ampliar tan cap als laterals com en la zona vertical
 MARGE_VERTICAL=190
 xRATIO=480
 yRATIO=640
 hResized=150 #alçada de les imatges redimensionades
-RESIZE=False #en aquest cas redimensinarem les cares
+RESIZE=True #en aquest cas redimensinarem les cares
 RENAME=True #en aquest cas reanomenam les captures segons l'ordre en que es van prendre
 
 def detectObjects(image,k,file):
@@ -28,11 +28,12 @@ def detectObjects(image,k,file):
      if faces:
          for f in faces:
              img = adaptors.Ipl2PIL(image)
-             box = (f.x-MARGE_LATERAL, f.y-MARGE_VERTICAL, f.x+f.width+MARGE_LATERAL, f.y+f.height+MARGE_VERTICAL)
+             box = (f.x-MARGE_LATERAL, f.y-100, f.x+f.width+MARGE_LATERAL, f.y+f.height+MARGE_VERTICAL)
              #redimensionam la capsa per evitar deformacions a l'hora de pujar al gestib
              faceY=box[3]-box[1]
              faceX=(faceY*xRATIO)/yRATIO
-             box=(f.x-MARGE_LATERAL, f.y-MARGE_VERTICAL, f.x+faceX,f.y+f.height+MARGE_VERTICAL)
+             #box=(f.x-MARGE_LATERAL, f.y-MARGE_VERTICAL, f.x+faceX,f.y+f.height+MARGE_VERTICAL)
+             print "box",box
              region = img.crop(box)
              factor=float(hResized)/region.size[1]
              wResized=region.size[0]*factor
